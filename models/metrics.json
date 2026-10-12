@@ -1,0 +1,62 @@
+{
+  "models": {
+    "likes_rate": {
+      "Linear Regression": {
+        "mae": 0.974,
+        "rmse": 1.37,
+        "r2": 0.406
+      },
+      "Random Forest": {
+        "mae": 0.957,
+        "rmse": 1.325,
+        "r2": 0.445
+      },
+      "best": "Random Forest"
+    },
+    "comments_rate": {
+      "Linear Regression": {
+        "mae": 0.078,
+        "rmse": 0.103,
+        "r2": 0.336
+      },
+      "Random Forest": {
+        "mae": 0.079,
+        "rmse": 0.104,
+        "r2": 0.327
+      },
+      "best": "Linear Regression"
+    }
+  },
+  "final": {
+    "likes": {
+      "mae": 78.465,
+      "rmse": 171.699,
+      "r2": 0.882
+    },
+    "comments": {
+      "mae": 5.746,
+      "rmse": 11.666,
+      "r2": 0.689
+    },
+    "engagement_rate": {
+      "mae": 1.003,
+      "rmse": 1.388,
+      "r2": 0.448
+    }
+  },
+  "dataset": {
+    "rows": 800,
+    "train_rows": 640,
+    "test_rows": 160
+  },
+  "feature_importance": {
+    "followers": 37.3,
+    "post_type": 21.2,
+    "posting_hour": 17.3,
+    "caption_length": 10.5,
+    "day_of_week": 5.9,
+    "hashtags": 5.2,
+    "has_cta": 2.6
+  },
+  "sklearn_version": "1.9.1"
+}

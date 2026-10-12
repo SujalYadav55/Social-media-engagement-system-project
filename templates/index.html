@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Predict engagement | Engagement Predictor{% endblock %}
+
+{% block content %}
+<section class="intro">
+  <h1>Predict how an Instagram post will perform</h1>
+  <p>Describe the post you are planning. You get the expected likes, comments and engagement rate.</p>
+</section>
+
+{% if errors %}
+<div class="alert" role="alert">
+  <strong>Fix these before predicting:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<form class="panel" action="{{ url_for('predict') }}" method="post" novalidate>
+  <div class="field">
+    <label for="followers">Followers</label>
+    <input id="followers" name="followers" type="text" inputmode="numeric" value="{{ values.followers }}" required>
+    <p class="hint">How many followers the account has now.</p>
+  </div>
+
+  <fieldset class="field">
+    <legend>Post type</legend>
+    <div class="choices">
+      {% for t in post_types %}
+      <label class="choice">
+        <input type="radio" name="post_type" value="{{ t }}" {% if values.post_type == t %}checked{% endif %}>
+        <span>{{ t|capitalize }}</span>
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="caption">Caption</label>
+    <textarea id="caption" name="caption" rows="5" placeholder="Write the caption as you would post it. Hashtags are counted automatically, for example: Sunset at the campus lake. Which spot is your favourite? #campus #sunset">{{ values.caption }}</textarea>
+    <p class="hint" id="caption-stats" aria-live="polite">Hashtags are counted and left out of the caption length.</p>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label for="day_of_week">Day posted</label>
+      <select id="day_of_week" name="day_of_week">
+        {% for d in days %}<option value="{{ d }}" {% if values.day_of_week == d %}selected{% endif %}>{{ d }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="posting_hour">Time posted</label>
+      <select id="posting_hour" name="posting_hour">
+        {% for h, label in hours %}<option value="{{ h }}" {% if values.posting_hour|string == h|string %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="field check">
+    <input id="has_cta" name="has_cta" type="checkbox" {% if values.has_cta %}checked{% endif %}>
+    <label for="has_cta">The caption asks viewers to act (comment, share, tap the link)</label>
+  </div>
+
+  <button class="button" type="submit">Predict engagement</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}

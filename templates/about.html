@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}About | Engagement Predictor{% endblock %}
+
+{% block content %}
+<section class="intro">
+  <h1>How this project works</h1>
+  <p>A short guide to the data, the models and how far you can trust the numbers.</p>
+</section>
+
+<section class="panel">
+  <h2>From form to prediction</h2>
+  <ol class="steps">
+    <li>You describe a post on the Predict page.</li>
+    <li>Flask turns the form into a row of data: followers, post type, caption length, hashtags, day, hour and call to action.</li>
+    <li>Two trained models estimate likes per 100 followers and comments per 100 followers.</li>
+    <li>The app multiplies by your follower count to get likes and comments, and adds the two percentages to get the engagement rate.</li>
+  </ol>
+</section>
+
+<section class="panel">
+  <h2>The sample dataset</h2>
+  <p>
+    The project ships with {{ metrics.dataset.rows if metrics else 800 }} computer-generated posts. They follow common patterns
+    (reels and carousels do well, evenings are busy, small accounts have higher rates) but they are
+    <strong>not real Instagram data</strong>. Replace <code>data/instagram_posts.csv</code> with your own file
+    that has the same columns and run <code>python train_model.py</code> to retrain.
+  </p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th scope="col">Column</th><th scope="col">Meaning</th></tr></thead>
+      <tbody>
+        {% for name, meaning in columns %}
+        <tr><td><code>{{ name }}</code></td><td>{{ meaning }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% if metrics %}
+<section class="panel">
+  <h2>Model accuracy</h2>
+  <p>
+    {{ metrics.dataset.train_rows }} posts were used to train and {{ metrics.dataset.test_rows }} were kept back to test.
+    Two algorithms were tried for each percentage and the one with the higher R&sup2; was kept.
+  </p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th scope="col">Target (percentage points)</th><th scope="col">Algorithm</th><th scope="col">MAE</th><th scope="col">RMSE</th><th scope="col">R&sup2;</th><th scope="col">Used</th></tr>
+      </thead>
+      <tbody>
+        {% for target, results in metrics.models.items() %}
+          {% for algo, r in results.items() if algo != 'best' %}
+          <tr>
+            <td>{{ target.replace('_', ' ') }}</td><td>{{ algo }}</td>
+            <td>{{ r.mae }}</td><td>{{ r.rmse }}</td><td>{{ r.r2 }}</td>
+            <td>{% if results.best == algo %}Yes{% endif %}</td>
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <h3>What you see on the results page, checked on the test posts</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th scope="col">Prediction</th><th scope="col">Typical error (MAE)</th><th scope="col">R&sup2;</th></tr></thead>
+      <tbody>
+        <tr><td>Likes</td><td>{{ metrics.final.likes.mae }} likes</td><td>{{ metrics.final.likes.r2 }}</td></tr>
+        <tr><td>Comments</td><td>{{ metrics.final.comments.mae }} comments</td><td>{{ metrics.final.comments.r2 }}</td></tr>
+        <tr><td>Engagement rate</td><td>{{ metrics.final.engagement_rate.mae }} percentage points</td><td>{{ metrics.final.engagement_rate.r2 }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">
+    MAE is the average size of the miss. R&sup2; is 1 for a perfect model and 0 for one no better than guessing the average.
+    Likes and comments score higher than the rate because they mostly follow the follower count, which is easy to predict.
+    The rate is harder because real posts vary a lot for reasons no form can capture.
+  </p>
+</section>
+
+<section class="panel">
+  <h2>What mattered most</h2>
+  <p class="hint">Share of the Random Forest's decisions that relied on each input (likes model).</p>
+  <ul class="bars">
+    {% set top = metrics.feature_importance.values()|max %}
+    {% for name, share in metrics.feature_importance.items() %}
+    <li>
+      <span class="name">{{ name.replace('_', ' ') }}</span>
+      <span class="track"><span class="fill" style="width: {{ (share / top * 100)|round|int }}%"></span></span>
+      <span class="value">{{ share }}%</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="panel">
+  <h2>Limits to keep in mind</h2>
+  <ul class="plain">
+    <li>The data is synthetic, so the patterns the model learned are the ones put into it, not discoveries about real Instagram.</li>
+    <li>The inputs leave out things that matter in real life: image quality, topic, audience, trends and the algorithm.</li>
+    <li>Accounts outside 200 to 500,000 followers fall outside what the model has seen.</li>
+  </ul>
+</section>
+{% endblock %}

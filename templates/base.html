@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Engagement Predictor{% endblock %}</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="{{ url_for('home') }}">Engagement Predictor</a>
+      <nav aria-label="Main">
+        <a href="{{ url_for('home') }}" {% if request.endpoint in ('home', 'predict') %}aria-current="page"{% endif %}>Predict</a>
+        <a href="{{ url_for('about') }}" {% if request.endpoint == 'about' %}aria-current="page"{% endif %}>About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="wrap site-footer">
+    College mini project. Predictions come from a model trained on a sample dataset, not on real Instagram data.
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

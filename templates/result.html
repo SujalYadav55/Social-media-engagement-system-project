@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Your prediction | Engagement Predictor{% endblock %}
+
+{% block content %}
+<section class="intro">
+  <h1>Your prediction</h1>
+  <p>
+    {{ features.post_type|capitalize }} post for {{ "{:,}".format(features.followers) }} followers,
+    published on {{ features.day_of_week }} at {{ hour }}.
+  </p>
+</section>
+
+{% for note in notes %}
+<div class="alert" role="note"><p>{{ note }}</p></div>
+{% endfor %}
+
+<section class="results" aria-label="Predicted results">
+  <div class="headline">
+    <p class="label">Predicted engagement rate</p>
+    <p class="big">{{ "%.2f"|format(rate) }}%</p>
+    <p class="verdict">{{ category }}</p>
+  </div>
+
+  <dl class="counts">
+    <div>
+      <dt>Predicted likes</dt>
+      <dd>{{ "{:,}".format(likes) }}</dd>
+    </div>
+    <div>
+      <dt>Predicted comments</dt>
+      <dd>{{ "{:,}".format(comments) }}</dd>
+    </div>
+  </dl>
+</section>
+
+<p class="small">
+  Engagement rate = (likes + comments) &divide; followers &times; 100.
+  Bands used here (a rough rule of thumb): below 1% low, 1&ndash;3% average, 3&ndash;6% high, above 6% very high.
+</p>
+
+<section class="panel">
+  <h2>Same post, different format</h2>
+  <p class="hint">Predicted engagement rate if only the post type changed.</p>
+  <ul class="bars">
+    {% for item in type_comparison %}
+    <li {% if item.selected %}class="selected"{% endif %}>
+      <span class="name">{{ item.post_type|capitalize }}{% if item.selected %} (your choice){% endif %}</span>
+      <span class="track"><span class="fill" style="width: {{ item.width }}%"></span></span>
+      <span class="value">{{ "%.2f"|format(item.rate) }}%</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="panel">
+  <h2>Best time to post</h2>
+  <p>
+    Keeping everything else the same, the model expects the highest rate at
+    <strong>{{ best_hour.hour }}</strong> ({{ "%.2f"|format(best_hour.rate) }}%).
+  </p>
+</section>
+
+<section class="panel">
+  <h2>What the model used</h2>
+  <p class="hint">Read from your caption: {{ features.caption_length }} characters, {{ features.hashtags }}
+    hashtag{% if features.hashtags != 1 %}s{% endif %}, {% if features.has_cta %}with{% else %}without{% endif %} a call to action.</p>
+</section>
+
+<p><a class="button" href="{{ url_for('home') }}">Predict another post</a></p>
+{% endblock %}
