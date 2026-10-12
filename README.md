@@ -1,3 +1,5 @@
+##Social Media Engagement Prediction System
+
 ## Use your own dataset
 
 1. Make a CSV with these columns: `followers, post_type, caption_length, hashtags, posting_hour, day_of_week, has_cta, likes, comments, engagement_rate` (see the About page for what each means). `post_type` must be one of image, carousel, video, reel.
