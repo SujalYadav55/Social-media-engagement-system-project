@@ -1,14 +1,3 @@
-"""
-app.py
-The Flask web application.
-
-Pages:
-  /          the form where you describe a post
-  /predict   shows the predicted likes, comments and engagement rate
-  /about     explains the dataset, the models and how accurate they are
-
-Run:  python app.py      then open http://127.0.0.1:5000
-"""
 import json
 
 import joblib
