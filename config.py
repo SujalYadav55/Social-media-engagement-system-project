@@ -1,8 +1,3 @@
-"""
-config.py
-Shared settings used by every other file in the project.
-Keeping them in one place means we only change a value once.
-"""
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
