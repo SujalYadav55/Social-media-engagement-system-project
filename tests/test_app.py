@@ -1,6 +1,3 @@
-"""
-Basic tests. Run from the project folder with:  python -m unittest discover tests -v
-"""
 import sys
 import unittest
 from pathlib import Path
