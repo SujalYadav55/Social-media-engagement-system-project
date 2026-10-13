@@ -1,5 +1,3 @@
-// Shows a live count of caption characters and hashtags while the user types.
-// The form works without this file; it only makes the page friendlier.
 (function () {
   var box = document.getElementById("caption");
   var stats = document.getElementById("caption-stats");
