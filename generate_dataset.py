@@ -1,16 +1,3 @@
-"""
-generate_dataset.py
-Creates a small SAMPLE dataset of Instagram posts and saves it to
-data/instagram_posts.csv.
-
-IMPORTANT: this data is synthetic (computer-generated). It follows common
-sense patterns (reels do well, evenings are busy, small accounts have higher
-engagement rates) so that the model has something realistic to learn, but it is
-NOT real Instagram data. Say this clearly in your report. To use real data,
-replace the CSV with your own file that has the same columns.
-
-Run:  python generate_dataset.py
-"""
 import numpy as np
 import pandas as pd
 
