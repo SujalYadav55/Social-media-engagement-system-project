@@ -1,22 +1,3 @@
-"""
-train_model.py
-Trains the machine learning models and saves them to models/engagement_model.pkl
-
-What happens here:
-  1. Load the dataset (create it first if it does not exist)
-  2. Split it: 80% to learn from (train), 20% to check the result (test)
-  3. Train two kinds of model for LIKES and for COMMENTS
-       - Linear Regression  (simple baseline)
-       - Random Forest      (many decision trees voting together)
-  4. Compare them with MAE, RMSE and R2 and keep the better one
-  5. Save the models and the scores
-
-The models predict PERCENTAGES (likes per 100 followers, comments per 100
-followers) because follower counts vary hugely. The final likes, comments and
-engagement rate are worked out from those percentages in predictor.py.
-
-Run:  python train_model.py
-"""
 import json
 
 import joblib
