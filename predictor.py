@@ -1,8 +1,3 @@
-"""
-predictor.py
-Turns the two trained models into the three numbers the user wants:
-likes, comments and engagement rate.
-"""
 import numpy as np
 import pandas as pd
 
