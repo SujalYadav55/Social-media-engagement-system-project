@@ -1,4 +1,3 @@
-/* style.css - plain CSS, no frameworks. Colours and sizes live in :root so they are easy to change. */
 :root {
   --ink: #1d1730;
   --muted: #5d5873;
